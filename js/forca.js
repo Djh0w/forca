@@ -1,15 +1,10 @@
-const palavra = document.querySelector('.palavra')
-const categoria = document.querySelector('.categoria')
-const jogar = document.querySelector('.jogar')
-const form = document.querySelector('.form')
+const palavra = document.querySelector('.palavra') // instancia objeto do input class .palavra
+const categoria = document.querySelector('.categoria') //instancia objeto do input categoria class .categoria
+const jogar = document.querySelector('.jogar') // instancia objeto do botao tipo botao
 
-//traz o item do storage
-let categoriaStorage = localStorage.getItem('categoria').toUpperCase()
-let palavraStorage = localStorage.getItem('palavra').toUpperCase()
-
-//para melhor visualizacao no codigo - variaveis de trabalho
-let categoriaSecreta = categoriaStorage
-let palavraSecreta = palavraStorage
+//para melhor visualizacao no codigo - variaveis globais
+let categoriaSecreta  
+let palavraSecreta 
 
 let tentativas = 6
 
@@ -36,29 +31,34 @@ const validadeInput = ({ target }) => {
 const handleSubmit = (event) => {
     event.preventDefault()
 
-    /*Local Storage e o local do browser onde salvam informacoes
-     recebe dois parametros, chave e valor do input */    
-    localStorage.setItem('palavra', palavra.value)
-    localStorage.setItem('categoria', categoria.value)
+    //variavel temporaria apenas para poder transformar em caixa alta
+    let categoriaUpper = categoria.value
+    let palavraUpper = palavra.value
+
+    //atribui o valor digitado so que em caixa alta
+    categoriaSecreta = categoriaUpper.toUpperCase()
+    palavraSecreta = palavraUpper.toUpperCase()
+
+    console.log(categoriaSecreta)
+    console.log(palavraSecreta)
+
+    //chama a funcao para escrever o pontilhado e trazer categoria
+    writeWord()
 
     //limpar os campos depois de cliar no botao    
     palavra.value = ''
     categoria.value = ''
-
-    //chama a funcao para escrever o pontilhado e trazer categoria
-    writeWord()
         
 }
 
 //executa as funcoes de validacao e armazenamento no storage
 palavra.addEventListener('input', validadeInput)
-form.addEventListener('submit', handleSubmit)
+//Quando clicar em jogar chama a funcao para escrever palavra/categoria na tela
+jogar.addEventListener('click', handleSubmit)
+
 
 //funcao que escreve a palavra e categoria na tela
 const writeWord = () => {
-    console.log(palavraSecreta)
-    console.log(categoriaSecreta)    
-    console.log(palavraSecreta.length)   
 
     //Categoria na tela 
     const categoriaTela = document.getElementById('categoria')
@@ -139,9 +139,10 @@ const compareLists = (letra) => {
     } else {//senao entra na lista e armazena letra ate length da palavra
         //se vitoria mantem a estilizacao
         changeStyleLetter('tecla-'+ letra, true)
-        for(i = 0; i < palavraSecreta.length; i++) {
-            if(palavraSecreta[i] == letra) {
-                listaDinamica[i] = letra
+
+        for(i = 0; i < palavraSecreta.length; i++) {            
+            if(palavraSecreta[i] == letra) {//se existir a letra naquela posicao
+                listaDinamica[i] = letra //guarda a letra na lista 
             }
         }
     }
@@ -150,7 +151,7 @@ const compareLists = (letra) => {
     //percorre ate o tamanho da palavra
     for (i = 0; i < palavraSecreta.length; i++) {
 
-        //CONDICAO PRINCIPAL ONDE COMPARA POSICAO A POSICAO DA LETRA ENTRE A PALAVRA (STORAGE) COM A LISTA, SE FOR != A VARIAVEL LOGICA VITORIA = FALSE
+        //CONDICAO PRINCIPAL ONDE COMPARA POSICAO A POSICAO DA LETRA ENTRE A PALAVRA COM A LISTA, SE FOR != A VARIAVEL LOGICA VITORIA = FALSE
         if (palavraSecreta[i] != listaDinamica[i]) {
             vitoria = false 
         }
@@ -214,3 +215,4 @@ let btnReiniciar = document.querySelector('#btnReiniciar')
 btnReiniciar.addEventListener('click', () => {
     location.reload()
 })
+
