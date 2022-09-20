@@ -1,6 +1,7 @@
 const palavra = document.querySelector('.palavra') // instancia objeto do input class .palavra
 const categoria = document.querySelector('.categoria') //instancia objeto do input categoria class .categoria
 const jogar = document.querySelector('.jogar') // instancia objeto do botao tipo botao
+const JogarDeNovo = true
 
 //para melhor visualizacao no codigo - variaveis globais
 let categoriaSecreta  
@@ -122,7 +123,7 @@ const changeStyleLetter = (tecla, condicao) => {
 }
 
 //compara a letra em cada posicao da palavra do storage com a lista
-const compareLists = (letra) => {   
+const compareLists = async (letra) => {   
     //variavel que guarda a posicao 
     const pos = palavraSecreta.indexOf(letra)
     //decresce as tentativas quando nao aceta a posicao
@@ -134,6 +135,8 @@ const compareLists = (letra) => {
         if (tentativas == 0) {
             //chama a funcao modal com a mensagem como parametro
             openModal('OPS!', 'JUDAS FOI ENFORCADO! <br> A palavra correta é: '+ palavraSecreta)
+
+            await color()
         }
 
     } else {//senao entra na lista e armazena letra ate length da palavra
@@ -161,7 +164,26 @@ const compareLists = (letra) => {
         openModal('PARABENS!', 'VOCÊ VENCEU!')
         //e zera as tentativas
         tentativas = 0
+        
+        await color()
+
     }
+}
+
+const color = async () => {
+    while (JogarDeNovo == true) {
+        document.getElementById('btnReiniciar').style.backgroundColor = 'red'
+        document.getElementById('btnReiniciar').style.scale = 1.3
+        await delay(500)
+        document.getElementById('btnReiniciar').style.backgroundColor = 'yellow'
+        document.getElementById('btnReiniciar').style.scale = 1
+        await delay(500)
+
+    }
+}
+
+const delay = async (tempo) => {
+    return new Promise(x => setTimeout(x, tempo))
 }
 
 //Carrega as imagens na forca (bkground) conforme as tentativas
@@ -212,7 +234,9 @@ const openModal = (titulo, mensagem) => {
 
 //RESET DE TELA QUANDO CLICA NO BOTAO DO JOYSTICK
 let btnReiniciar = document.querySelector('#btnReiniciar')
-btnReiniciar.addEventListener('click', () => {
+btnReiniciar.addEventListener('click', () => {    
     location.reload()
+
+    JogarDeNovo = false
 })
 
