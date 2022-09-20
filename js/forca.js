@@ -123,7 +123,7 @@ const changeStyleLetter = (tecla, condicao) => {
 }
 
 //compara a letra em cada posicao da palavra do storage com a lista
-const compareLists = async (letra) => {   
+const compareLists = (letra) => {   
     //variavel que guarda a posicao 
     const pos = palavraSecreta.indexOf(letra)
     //decresce as tentativas quando nao aceta a posicao
@@ -136,7 +136,7 @@ const compareLists = async (letra) => {
             //chama a funcao modal com a mensagem como parametro
             openModal('OPS!', 'JUDAS FOI ENFORCADO! <br> A palavra correta é: '+ palavraSecreta)
 
-            await color()
+            color()
         }
 
     } else {//senao entra na lista e armazena letra ate length da palavra
@@ -165,7 +165,7 @@ const compareLists = async (letra) => {
         //e zera as tentativas
         tentativas = 0
         
-        await color()
+        color()
 
     }
 }
